@@ -9,6 +9,9 @@ import Footer from './Footer';
 function App() {
   const [recherche, setRecherche] = useState("");
   const [ligneSelectionnee, setLigneSelectionnee] = useState(null);
+  
+  // Exercice 3 : Compteur de recherches
+  const [compteur, setCompteur] = useState(0);
 
   const lignes = [
     { id: 1, numero: "1", depart: "Parcelles Assainies", arrivee: "Plateau", arrets: 14, listeArrets: ["Parcelles U14", "Parcelles U10", "Camberene", "Patte d'Oie", "Grand Dakar", "Colobane", "Ponty", "Plateau"] },
@@ -18,6 +21,12 @@ function App() {
     { id: 5, numero: "8", depart: "Almadies", arrivee: "Colobane", arrets: 16, listeArrets: ["Almadies", "Ngor", "Yoff", "Ouest Foire", "Liberte 6", "Colobane"] },
     { id: 6, numero: "12", depart: "Yoff", arrivee: "Sandaga", arrets: 11, listeArrets: ["Yoff Village", "Aeroport LSS", "Parcelles U17", "Grand Yoff", "HLM", "Sandaga"] }
   ];
+
+  // Fonction pour gérer la recherche et le compteur
+  const handleRechercheChange = (valeur) => {
+    setRecherche(valeur);
+    setCompteur(compteur + 1); // Incrémente à chaque saisie
+  };
 
   const lignesFiltrees = lignes.filter(l =>
     l.depart.toLowerCase().includes(recherche.toLowerCase()) ||
@@ -37,11 +46,26 @@ function App() {
     <div className="App">
       <Header />
       <main className="contenu">
-        <Recherche valeur={recherche} onChange={setRecherche} />
+        {/* Exercice 3 : Affichage du compteur */}
+        <p className="compteur">Vous avez effectué {compteur} recherche(s)</p>
+
+        <div className="recherche-container" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Recherche valeur={recherche} onChange={handleRechercheChange} />
+          
+          {/* Exercice 1 : Bouton Effacer */}
+          <button onClick={() => setRecherche("")} className="btn-effacer">
+            Effacer
+          </button>
+        </div>
         
         <p className="resultat-recherche">
           {lignesFiltrees.length} ligne{lignesFiltrees.length > 1 ? 's' : ''} trouvée{lignesFiltrees.length > 1 ? 's' : ''}
         </p>
+
+        {/* Exercice 2 : Message si aucune ligne trouvée */}
+        {lignesFiltrees.length === 0 && (
+          <p className="message-erreur">Aucune ligne trouvée</p>
+        )}
 
         {lignesFiltrees.map(ligne => (
           <LigneBus
@@ -55,9 +79,7 @@ function App() {
           />
         ))}
 
-        {ligneSelectionnee && (
-          <DetailLigne ligne={ligneSelectionnee} />
-        )}
+        {ligneSelectionnee && <DetailLigne ligne={ligneSelectionnee} />}
       </main>
       <Footer />
     </div>
