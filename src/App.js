@@ -4,6 +4,7 @@ import Header from './Header';
 import Recherche from './Recherche';
 import LigneBus from './LigneBus';
 import DetailLigne from './DetailLigne';
+import Carte from './Carte';
 import Footer from './Footer';
 
 function App() {
@@ -89,7 +90,7 @@ function App() {
     );
   }
 
-  // Ecran normal (inchangé par rapport au Lab 3)
+  // Ecran normal
   return (
     <div className="App">
       <Header />
@@ -124,6 +125,8 @@ function App() {
         ))}
 
         {ligneSelectionnee && <DetailLigne ligne={ligneSelectionnee} />}
+        
+        <Carte /> {/* AJOUT TP : Positionnement de la carte sous le détail et avant le footer */}
       </main>
       <Footer />
     </div>

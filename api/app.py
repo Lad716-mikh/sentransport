@@ -5,9 +5,13 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# Charger les données depuis le fichier JSON
+# Charger les données depuis le fichier JSON des lignes
 with open("lignes_ddd.json", "r") as f:
     lignes = json.load(f)
+
+# AJOUT TP : Charger les données depuis le fichier JSON des arrêts
+with open("arrets.json", "r") as f:
+    arrets = json.load(f)
 
 @app.route("/")
 def accueil():
@@ -30,15 +34,10 @@ def get_ligne(ligne_id):
         return jsonify({"erreur": "Ligne non trouvee"}), 404
     return jsonify(ligne)
 
+# MODIFICATION TP : Remplacement de l'ancienne fonction par celle demandée
 @app.route("/arrets")
-def get_all_arrets():
-    tous_les_arrets = []
-    for ligne in lignes:
-        tous_les_arrets.extend(ligne["listeArrets"])
-    
-    # Utilisation de set() pour supprimer les doublons
-    arrets_uniques = list(set(tous_les_arrets))
-    return jsonify(arrets_uniques)
+def get_arrets():
+    return jsonify(arrets)
 
 @app.route("/stats")
 def get_stats():
