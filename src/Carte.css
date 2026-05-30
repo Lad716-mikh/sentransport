@@ -29,3 +29,73 @@
     height: 300px;
   }
 }
+
+/* Style pour le bouton Centrer (Exercice 2) */
+.btn-centrer {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000; /* Obligatoire pour passer au-dessus des tuiles Leaflet */
+  background-color: #ffffff;
+  color: #2c3e50;
+  border: 1px solid rgba(0, 0, 0, 0.2); /* CORRIGÉ : Retrait du # parasite et ajusté à 1px pour faire propre */
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+  font-family: inherit;
+}
+
+.btn-centrer:hover {
+  background-color: #f4f4f4;
+  color: #16a085;
+}
+
+/* Style pour la liste du Top 3 (Exercice 3) */
+.top-arrets-box {
+  background-color: #f8f9fa;
+  border-left: 4px solid #16a085;
+  padding: 12px 16px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+.top-arrets-box h3 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  color: #2c3e50;
+}
+
+.top-arrets-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.top-arrets-box li {
+  padding: 6px 0;
+  font-size: 0.95rem;
+  border-bottom: 1px dashed #dcdde1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-arrets-box li:last-child {
+  border-bottom: none;
+}
+
+/* Mettre en valeur le premier (le plus proche) */
+.top-arrets-box li.premier-arret {
+  color: #d35400; /* Couleur orange comme son marqueur */
+  font-weight: 500;
+}
+
+.lignes-badge {
+  background-color: #e0f2f1;
+  color: #004d40;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}

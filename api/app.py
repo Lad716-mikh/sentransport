@@ -1,5 +1,5 @@
 import json
-from flask import Flask, jsonify, request  # Ajout de request ici
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -9,15 +9,47 @@ CORS(app)
 with open("lignes_ddd.json", "r") as f:
     lignes = json.load(f)
 
-# AJOUT TP : Charger les données depuis le fichier JSON des arrêts
+# Charger les données depuis le fichier JSON des arrêts
 with open("arrets.json", "r") as f:
     arrets = json.load(f)
+
+# --- GESTION DES INCIDENTS (Lab 7) ---
+
+# Liste globale temporaire pour stocker les incidents en mémoire
+incidents = []
+
+@app.route("/incidents", methods=["GET"])
+def get_incidents():
+    """Retourne la liste de tous les incidents signalés"""
+    return jsonify(incidents)
+
+@app.route("/incidents", methods=["POST"])
+def post_incident():
+    """Permet de signaler un nouvel incident sur une ligne"""
+    data = request.get_json()
+    
+    # Validation : vérification des champs obligatoires
+    if not data or "ligne" not in data or "description" not in data:
+        return jsonify({"erreur": "Champs requis manquants"}), 400
+        
+    # Création du nouvel incident avec un ID auto-incrémenté
+    incident = {
+        "id": len(incidents) + 1,
+        "ligne": data["ligne"],
+        "description": data["description"],
+        "lieu": data.get("lieu", "Non precise")
+    }
+    
+    incidents.append(incident)
+    return jsonify(incident), 201
+
+# --- AUTRES ENDPOINTS EXISTANTS ---
 
 @app.route("/")
 def accueil():
     return jsonify({
         "message": "Bienvenue sur l'API SenTransport !",
-        "endpoints": ["/lignes", "/lignes/<id>", "/arrets", "/stats", "/lignes/recherche"]
+        "endpoints": ["/lignes", "/lignes/<id>", "/arrets", "/stats", "/lignes/recherche", "/incidents"]
     })
 
 @app.route("/lignes")
@@ -34,7 +66,6 @@ def get_ligne(ligne_id):
         return jsonify({"erreur": "Ligne non trouvee"}), 404
     return jsonify(ligne)
 
-# MODIFICATION TP : Remplacement de l'ancienne fonction par celle demandée
 @app.route("/arrets")
 def get_arrets():
     return jsonify(arrets)
@@ -67,4 +98,5 @@ def rechercher_lignes():
 
 # TOUJOURS À LA FIN DU FICHIER
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    # Remplacement par host="0.0.0.0" pour autoriser les tests sur PC et mobile en local
+    app.run(debug=True, host="0.0.0.0", port=5000)

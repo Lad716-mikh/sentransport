@@ -6,25 +6,24 @@ import LigneBus from './LigneBus';
 import DetailLigne from './DetailLigne';
 import Carte from './Carte';
 import Footer from './Footer';
+import Meteo from './Meteo';
+import SignalerIncident from './SignalerIncident';
 
 function App() {
-  // 1. Trois etats (Etape 3)
+  // 1. États
   const [lignes, setLignes] = useState([]);
   const [chargement, setChargement] = useState(true);
   const [erreur, setErreur] = useState(null);
   const [recherche, setRecherche] = useState("");
   const [ligneSelectionnee, setLigneSelectionnee] = useState(null);
-  
   const [compteur, setCompteur] = useState(0);
 
-  // 2. Charger les donnees au demarrage (Etape 3)
+  // 2. Charger les données au démarrage
   useEffect(() => {
     fetch("http://localhost:5000/lignes")
       .then(response => {
         if (!response.ok) {
-          throw new Error(
-            "Erreur serveur : " + response.status
-          );
+          throw new Error("Erreur serveur : " + response.status);
         }
         return response.json();
       })
@@ -58,23 +57,19 @@ function App() {
     }
   }
 
-  // --- ÉTAPE 4 : Écrans de chargement et d'erreur ---
-
-  // Ecran de chargement
+  // Écran de chargement
   if (chargement) {
     return (
       <div className="App">
         <Header />
         <main className="contenu">
-          <p className="message-chargement">
-            Chargement des lignes...
-          </p>
+          <p className="message-chargement">Chargement des données...</p>
         </main>
       </div>
     );
   }
 
-  // Ecran d'erreur
+  // Écran d'erreur
   if (erreur) {
     return (
       <div className="App">
@@ -83,18 +78,20 @@ function App() {
           <div className="message-erreur">
             <p>Impossible de charger les lignes.</p>
             <p className="erreur-detail">{erreur}</p>
-            <p>Verifiez que le serveur Flask est lance (python api/app.py).</p>
           </div>
         </main>
       </div>
     );
   }
 
-  // Ecran normal
+  // Écran normal
   return (
     <div className="App">
       <Header />
+
       <main className="contenu">
+        <Meteo />
+
         <p className="compteur">Vous avez effectué {compteur} recherche(s)</p>
 
         <div className="recherche-container" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -103,7 +100,7 @@ function App() {
             Effacer
           </button>
         </div>
-        
+
         <p className="resultat-recherche">
           {lignesFiltrees.length} ligne{lignesFiltrees.length > 1 ? 's' : ''} trouvée{lignesFiltrees.length > 1 ? 's' : ''}
         </p>
@@ -125,9 +122,12 @@ function App() {
         ))}
 
         {ligneSelectionnee && <DetailLigne ligne={ligneSelectionnee} />}
-        
-        <Carte /> {/* AJOUT TP : Positionnement de la carte sous le détail et avant le footer */}
+
+        <Carte />
+
+        <SignalerIncident />
       </main>
+
       <Footer />
     </div>
   );
